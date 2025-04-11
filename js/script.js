@@ -10,25 +10,49 @@ const inputGroup = document.getElementById(`input-group`);
 let remainingMs = 3000;
 let countdownIntervalId;
 
-const handleCountdown = () => {
+const firstCountdown = () => {
     remainingMs -= 1000;
 
     if(remainingMs > 0) {
         countdown.innerText= `${remainingMs / 1000}`
     } else {
         clearInterval(countdownIntervalId);
+        countdownIntervalId = null;
         countdown.classList.add(`d-none`);
-        generateNumbersList();
+
+        setTimeout(() => {
+            generateNumbersList();
+            remainingMs = 5000;
+            countdown.classList.remove(`d-none`);
+            viewingCountdown();
+        }, 0);
     }
 }
 
 const counterCountdown = () => {
-    if(!countdownIntervalId) {
-        countdownIntervalId = setInterval(handleCountdown, 1000);
+    if(!countdownIntervalId) countdownIntervalId = setInterval(firstCountdown, 1000);
+}
+
+const secondCountdown = () => {
+    remainingMs -= 1000;
+
+    if(remainingMs > 0) {
+        countdown.innerText= `${remainingMs / 1000}`;
+    } else {
+        clearInterval(countdownIntervalId);
+        countdown.classList.add(`d-none`);
+        numbersList.classList.add(`d-none`);
     }
 }
 
+const viewingCountdown = () => {
+    if(!countdownIntervalId) countdownIntervalId = setInterval(secondCountdown, 1000);
+}
+
 counterCountdown();
+
+
+// # Stampo i 5 numeri casuali
 
 const generateRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -45,9 +69,4 @@ const generateNumbersList = () => {
     }
     console.log(randomNumbers);
 }
-
-
-
-
-
 
