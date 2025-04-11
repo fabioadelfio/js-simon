@@ -7,8 +7,10 @@ const answersForm = document.getElementById(`answers-form`);
 const inputGroup = document.getElementById(`input-group`);
 
 // # Countdown
-let remainingMs = 1000;
+let remainingMs = 5000;
 let countdownIntervalId;
+
+// Creo il primo countdown e una volta terminato parte immediatamente il secondo
 
 const firstCountdown = () => {
     remainingMs -= 1000;
@@ -22,7 +24,7 @@ const firstCountdown = () => {
 
         setTimeout(() => {
             generateNumbersList();
-            remainingMs = 2000;
+            remainingMs = 10000;
             countdown.classList.remove(`d-none`);
             viewingCountdown();
         }, 0);
@@ -56,12 +58,16 @@ counterCountdown();
 
 // # Stampo i 5 numeri casuali
 
+// Dichiaro la funzione che mi genera un numero casuale
 const generateRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+// Dichiaro l'array in cui si inseriscono i numeri random
 let randomNumbers = [];
 
+// Dichiaro la funzione che genera 5 numeri casuali 
+// che vengono inseriti nell'array random e stampati
 const generateNumbersList = () => {
     for(i = 0; i < 5; i++) {
         randomNumbers.push(generateRandomNumber(1, 50));
@@ -79,7 +85,12 @@ const number3Input = document.getElementById(`number3`);
 const number4Input = document.getElementById(`number4`);
 const number5Input = document.getElementById(`number5`);
 
+// Dichiaro l'array in cui si inseriscono i numeri digitati dall'utente
+
 let userNumbersList = [];
+
+// Al click controllo quanti numeri inseriti dall'utente 
+// corrispondono a quelli dell'array random
 
 answersForm.addEventListener(`submit`, function (event) {
     event.preventDefault();
@@ -99,12 +110,15 @@ answersForm.addEventListener(`submit`, function (event) {
     console.log(userNumbersList);
 
     let counterGuessedNumber = 0;
+    let guessedNumbers = ``;
 
+    // Itero l'array per controllare se il numero corrente è incluso nell'array random
     for(i = 0; i < userNumbersList.length; i++) {
         const currentNumber = userNumbersList[i];
         if(randomNumbers.includes(currentNumber)){
             counterGuessedNumber += 1;
+            guessedNumbers += ` ` + currentNumber + ` `;
         }
     }
-    instructions.innerText = `Hai indovinato ${counterGuessedNumber} numeri!`
+    instructions.innerText = `Hai indovinato ${counterGuessedNumber} numeri! (${guessedNumbers})`;
 })
