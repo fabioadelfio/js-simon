@@ -7,14 +7,14 @@ const answersForm = document.getElementById(`answers-form`);
 const inputGroup = document.getElementById(`input-group`);
 
 // # Countdown
-let remainingMs = 3000;
+let remainingMs = 1000;
 let countdownIntervalId;
 
 const firstCountdown = () => {
     remainingMs -= 1000;
 
     if(remainingMs > 0) {
-        countdown.innerText= `${remainingMs / 1000}`
+        countdown.innerText = `${remainingMs / 1000}`
     } else {
         clearInterval(countdownIntervalId);
         countdownIntervalId = null;
@@ -22,7 +22,7 @@ const firstCountdown = () => {
 
         setTimeout(() => {
             generateNumbersList();
-            remainingMs = 5000;
+            remainingMs = 2000;
             countdown.classList.remove(`d-none`);
             viewingCountdown();
         }, 0);
@@ -42,6 +42,8 @@ const secondCountdown = () => {
         clearInterval(countdownIntervalId);
         countdown.classList.add(`d-none`);
         numbersList.classList.add(`d-none`);
+        answersForm.classList.remove(`d-none`);
+        instructions.innerText = `Indovina più numeri possibili!`;
     }
 }
 
@@ -58,8 +60,9 @@ const generateRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+let randomNumbers = [];
+
 const generateNumbersList = () => {
-    let randomNumbers = [];
     for(i = 0; i < 5; i++) {
         randomNumbers.push(generateRandomNumber(1, 50));
         const currentNumber = randomNumbers[i];
@@ -70,3 +73,38 @@ const generateNumbersList = () => {
     console.log(randomNumbers);
 }
 
+const number1Input = document.getElementById(`number1`);
+const number2Input = document.getElementById(`number2`);
+const number3Input = document.getElementById(`number3`);
+const number4Input = document.getElementById(`number4`);
+const number5Input = document.getElementById(`number5`);
+
+let userNumbersList = [];
+
+answersForm.addEventListener(`submit`, function (event) {
+    event.preventDefault();
+
+    const number1 = parseInt(number1Input.value);
+    const number2 = parseInt(number2Input.value);
+    const number3 = parseInt(number3Input.value);
+    const number4 = parseInt(number4Input.value);
+    const number5 = parseInt(number5Input.value);
+
+    userNumbersList.push(number1);
+    userNumbersList.push(number2);
+    userNumbersList.push(number3);
+    userNumbersList.push(number4);
+    userNumbersList.push(number5);
+
+    console.log(userNumbersList);
+
+    let counterGuessedNumber = 0;
+
+    for(i = 0; i < userNumbersList.length; i++) {
+        const currentNumber = userNumbersList[i];
+        if(randomNumbers.includes(currentNumber)){
+            counterGuessedNumber += 1;
+        }
+    }
+    instructions.innerText = `Hai indovinato ${counterGuessedNumber} numeri!`
+})
